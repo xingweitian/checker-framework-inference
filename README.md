@@ -79,6 +79,19 @@ To build:
 gradle dist
 ````
 
+To clone and build all dependencies:
+
+````
+gradle cloneAndBuildDependencies
+````
+
+To test the build
+````
+gradle testCheckerInferenceScript
+gradle testCheckerInferenceDevScript
+gradle testDataflowExternalSolvers
+````
+
 
 Execution
 ---------
