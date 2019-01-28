@@ -26,7 +26,7 @@ if [[ "${GROUP}" != "cfi-tests" && "${GROUP}" != downstream* && "${GROUP}" != "a
   exit 1
 fi
 
-./gradlew cloneAndBuildDependencies
+. ./gradlew cloneAndBuildDependencies
 
 # Test CF Inference
 if [[ "${GROUP}" == "cfi-tests" || "${GROUP}" == "all" ]]; then
