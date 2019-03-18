@@ -311,6 +311,10 @@ public class JaifBuilder {
                     // TODO: this is not a feature but a workaround of a bug:
                     // We should create a non-empty correct ASTPath for constructor
                     if (astRecord.astPath.equals(ASTPath.empty())) {
+                    	if (astRecord.methodName != null && astRecord.methodName.contains("<init>")) {
+                            astRecord = new ASTRecord(astRecord.ast, astRecord.className,
+                                    astRecord.methodName, astRecord.varName, ASTPathUtil.getMethodTypeASTPath());
+                        }
                         continue;
                     }
 
