@@ -511,7 +511,7 @@ public class VariableAnnotator extends AnnotatedTypeScanner<Void,Tree> {
             if (variable instanceof ConstantSlot) {
             	atm.removeAnnotation(((ConstantSlot) variable).getValue());
             }
-            atm.addAnnotation(slotManager.getAnnotation(variable));
+            atm.replaceAnnotation(slotManager.getAnnotation(variable));
         } else {
             AnnotationLocation location = treeToLocation(tree);
             variable = replaceOrCreateEquivalentVarAnno(atm, tree, location);
@@ -578,7 +578,7 @@ public class VariableAnnotator extends AnnotatedTypeScanner<Void,Tree> {
         if (realQualifier != null) {
         	atm.removeAnnotation(realQualifier);
         }
-        atm.addAnnotation(slotManager.getAnnotation(varSlot));
+        atm.replaceAnnotation(slotManager.getAnnotation(varSlot));
         return varSlot;
     }
 
