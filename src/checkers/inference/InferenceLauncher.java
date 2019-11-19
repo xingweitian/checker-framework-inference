@@ -38,6 +38,9 @@ public class InferenceLauncher {
     private final PrintStream outStream;
     private final PrintStream errStream;
 
+    private static final String PROP_PREFIX = "InferenceLauncher";
+    private static final String RUNTIME_BCP_PROP = PROP_PREFIX + ".runtime.bcp";
+
     public InferenceLauncher(PrintStream outStream, PrintStream errStream) {
         this.outStream = outStream;
         this.errStream = errStream;
@@ -157,6 +160,11 @@ public class InferenceLauncher {
         argList.add(java);
         argList.addAll(getMemoryArgs());
 
+        String bcp = getInferenceRuntimeBootclassPath();
+        if (bcp != null && !bcp.isEmpty()) {
+            argList.add("-Xbootclasspath/p:" + bcp);
+        }
+
         argList.add("-classpath");
         argList.add(getInferenceRuntimeClassPath());
 
@@ -166,7 +174,7 @@ public class InferenceLauncher {
 
         argList.addAll(
                 Arrays.asList(
-                        "-ea", "-ea:checkers.inference...", 
+                        "-ea", "-ea:checkers.inference...",
                         // TODO: enable assertions.
                         "-da:org.checkerframework.framework.flow...",
                         "checkers.inference.InferenceMain",
@@ -377,6 +385,11 @@ public class InferenceLauncher {
         }
         filePaths.add(InferenceOptions.targetclasspath);
         return filePaths;
+    }
+
+    // what used as bootclass to run the compiler
+    protected String getInferenceRuntimeBootclassPath() {
+        return System.getProperty( RUNTIME_BCP_PROP );
     }
 
     // what's used to run the compiler
