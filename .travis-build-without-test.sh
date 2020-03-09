@@ -20,7 +20,7 @@ export CHECKERFRAMEWORK="${CHECKERFRAMEWORK:-$(pwd -P)/../checker-framework}"
 export PATH=$AFU/scripts:$JAVA_HOME/bin:$PATH
 
 if [ -d "/tmp/plume-scripts" ] ; then
-  git -C /tmp/plume-scripts pull -q > /dev/null 2>&1
+  git -C /tmp/plume-scripts pull -q
 else
   git -C /tmp clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
 fi
@@ -32,6 +32,6 @@ fi
 (cd $CHECKERFRAMEWORK && checker/bin-devel/build.sh downloadjdk jdk8)
 
 # Finally build checker-framework-inference
-./gradlew dist
+./gradlew dist && ./gradlew testLibJar
 
 echo Exiting "$(cd "$(dirname "$0")" && pwd -P)/$(basename "$0")" in `pwd`
