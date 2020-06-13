@@ -1,10 +1,11 @@
 package checkers.inference;
 
-import checkers.inference.model.LubVariableSlot;
+import checkers.inference.model.*;
 import org.checkerframework.framework.qual.PolymorphicQualifier;
+import org.checkerframework.common.subtyping.qual.Unqualified;
 import org.checkerframework.framework.type.QualifierHierarchy;
 import org.checkerframework.framework.util.MultiGraphQualifierHierarchy;
-import org.checkerframework.javacutil.PluginUtil;
+import org.checkerframework.javacutil.SystemUtil;
 import org.checkerframework.javacutil.AnnotationUtils;
 import org.checkerframework.javacutil.BugInCF;
 
@@ -51,7 +52,7 @@ public class InferenceQualifierHierarchy extends MultiGraphQualifierHierarchy {
 
         if (varAnnot == null) {
             throw new BugInCF(
-                    "VarAnnot not found in the list of top annotations: tops=" + PluginUtil.join(", ", tops));
+                    "VarAnnot not found in the list of top annotations: tops=" + SystemUtil.join(", ", tops));
         }
 
         if (tops.size() != 1) {
@@ -136,7 +137,9 @@ public class InferenceQualifierHierarchy extends MultiGraphQualifierHierarchy {
                 return anno;
             }
         }
+
         return null;
+
     }
 
     @Override
@@ -194,15 +197,15 @@ public class InferenceQualifierHierarchy extends MultiGraphQualifierHierarchy {
         if (InferenceMain.isHackMode((rhsVarAnnot == null || lhsAnnos == null))) {
                 InferenceMain.getInstance().logger.info(
                     "Hack:\n"
-                  + "    rhs=" + PluginUtil.join(", ", rhsAnnos) + "\n"
-                  + "    lhs=" + PluginUtil.join(", ", lhsAnnos ));
+                  + "    rhs=" + SystemUtil.join(", ", rhsAnnos) + "\n"
+                  + "    lhs=" + SystemUtil.join(", ", lhsAnnos ));
                 return true;
         }
 
         assert rhsVarAnnot != null && lhsVarAnnot != null :
                 "All types should have exactly 1 VarAnnot!\n"
-              + "    rhs=" + PluginUtil.join(", ", rhsAnnos) + "\n"
-              + "    lhs=" + PluginUtil.join(", ", lhsAnnos );
+              + "    rhs=" + SystemUtil.join(", ", rhsAnnos) + "\n"
+              + "    lhs=" + SystemUtil.join(", ", lhsAnnos );
 
         return isSubtype(rhsVarAnnot, lhsVarAnnot);
     }
@@ -327,7 +330,7 @@ public class InferenceQualifierHierarchy extends MultiGraphQualifierHierarchy {
             return slotMgr.getAnnotation(slot1);
         }
     }
-    
+
     @Override
     public AnnotationMirror greatestLowerBound(final AnnotationMirror a1, final AnnotationMirror a2) {
         if (InferenceMain.isHackMode( (a1 == null || a2 == null))) {

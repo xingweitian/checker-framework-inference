@@ -22,7 +22,6 @@ import checkers.inference.model.AnnotationLocation.ClassDeclLocation;
 
 import com.sun.source.tree.Tree;
 
-import org.checkerframework.javacutil.PluginUtil;
 import org.checkerframework.javacutil.Pair;
 
 /**
@@ -220,7 +219,7 @@ public class JaifBuilder {
         builder.append("package " + classEntry.packageName + ":\n");
         builder.append("class " + classEntry.className + ":");
         if (!classEntry.declAnnos.isEmpty()) {
-            builder.append(PluginUtil.join(" ", classEntry.declAnnos));
+            builder.append(String.join(" ", classEntry.declAnnos));
         }
         builder.append("\n");
 
@@ -339,7 +338,7 @@ public class JaifBuilder {
     }
 
     /**
-     * @param astRecord
+     * @param astPath
      * @return true if the given AST path represents a main modifier of a local variable
      * An AST Path represents a main modifier of a local variable should have pattern like
      * 1) ..., Block.statement #, ..., Variable.type
