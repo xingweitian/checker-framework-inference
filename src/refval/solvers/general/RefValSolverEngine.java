@@ -8,7 +8,7 @@ import checkers.inference.solver.strategy.SolvingStrategy;
 import checkers.inference.solver.util.NameUtils;
 
 /**
- * RefValGeneralSolver is the solver for RefVal type system. It encode
+ * RefValSolverEngine is the solver for RefVal type system. It encode
  * RefVal type hierarchy as two qualifiers type system.
  * 
  * @author jianchu
