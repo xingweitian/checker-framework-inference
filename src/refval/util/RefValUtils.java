@@ -36,13 +36,8 @@ public class RefValUtils {
     private static String[] getReferenceValue(AnnotationMirror type, String valueName) {
         List<String> allTypesList = AnnotationUtils.getElementValueArray(type, valueName, String.class,
                 true);
-        // types in this list is org.checkerframework.framework.util.AnnotationBuilder.
         String[] allTypesInArray = new String[allTypesList.size()];
-        int i = 0;
-        for (Object o : allTypesList) {
-            allTypesInArray[i] = o.toString();
-            i++;
-        }
+        allTypesList.toArray(allTypesInArray);
         return allTypesInArray;
     }
 
@@ -56,11 +51,7 @@ public class RefValUtils {
     private static AnnotationMirror createRefValAnnotation(final Set<String> refValTypes,
             final AnnotationBuilder builder) {
         String[] refValTypesInArray = new String[refValTypes.size()];
-        int i = 0;
-        for (String refValType : refValTypes) {
-            refValTypesInArray[i] = refValType;
-            i++;
-        }
+        refValTypes.toArray(refValTypesInArray);
         builder.setValue("typeNames", refValTypesInArray);
         return builder.build();
     }
@@ -68,11 +59,7 @@ public class RefValUtils {
     private static AnnotationMirror createRefValAnnotationWithoutName(final Set<String> roots,
             final AnnotationBuilder builder) {
         String[] refValTypesInArray = new String[roots.size()];
-        int i = 0;
-        for (String refValType : roots) {
-            refValTypesInArray[i] = refValType;
-            i++;
-        }
+        roots.toArray(refValTypesInArray);
         builder.setValue("typeNameRoots", refValTypesInArray);
         return builder.build();
     }
@@ -80,7 +67,6 @@ public class RefValUtils {
     public static AnnotationMirror createRefValAnnotation(Set<String> refValTypes,
             ProcessingEnvironment processingEnv) {
         AnnotationBuilder builder = new AnnotationBuilder(processingEnv, RefVal.class);
-
         return createRefValAnnotation(refValTypes, builder);
     }
 
@@ -107,18 +93,11 @@ public class RefValUtils {
     private static AnnotationMirror createRefValAnnotationWithRoots(final Set<String> refValTypes,
             final Set<String> refValTypesRoots, final AnnotationBuilder builder) {
         String[] refValTypesInArray = new String[refValTypes.size()];
-        int i = 0;
-        for (String refValType : refValTypes) {
-            refValTypesInArray[i] = refValType;
-            i++;
-        }
+        refValTypes.toArray(refValTypesInArray);
 
         String[] refValTypesRootInArray = new String[refValTypesRoots.size()];
-        int j = 0;
-        for (String refValTypesRoot : refValTypesRoots) {
-            refValTypesRootInArray[j] = refValTypesRoot;
-            j++;
-        }
+        refValTypesRoots.toArray(refValTypesRootInArray);
+
         if (refValTypesRootInArray.length > 0) {
             builder.setValue("typeNameRoots", refValTypesRootInArray);
         }
@@ -133,29 +112,25 @@ public class RefValUtils {
             ProcessingEnvironment processingEnv) {
         TypeMirror tm = type.getUnderlyingType();
         String className = tm.toString();
-        AnnotationMirror refValType = createRefValAnnotation(convert(className), processingEnv);
-        return refValType;
+        return createRefValAnnotation(convert(className), processingEnv);
     }
 
     public static AnnotationMirror generateRefValAnnoFromByteCode(AnnotatedTypeMirror type,
             ProcessingEnvironment processingEnv) {
         TypeMirror tm = type.getUnderlyingType();
         String className = tm.toString();
-        AnnotationMirror refValType = createRefValAnnotationForByte(convert(className),
-                processingEnv);
-        return refValType;
+        return createRefValAnnotationForByte(convert(className), processingEnv);
     }
 
     public static AnnotationMirror generateRefValAnnoFromLiteral(AnnotatedTypeMirror type,
             ProcessingEnvironment processingEnv) {
-        String refValTypeInArray[] = convert(type.getUnderlyingType().toString());
-        AnnotationMirror refValType = createRefValAnnotation(refValTypeInArray, processingEnv);
-        return refValType;
+        String[] refValTypeInArray = convert(type.getUnderlyingType().toString());
+        return createRefValAnnotation(refValTypeInArray, processingEnv);
     }
 
     public static AnnotationMirror generateRefValAnnoFromLiteral(LiteralTree node,
             ProcessingEnvironment processingEnv) {
-        String refValTypeInArray[] = { "" };
+        String[] refValTypeInArray = { "" };
         switch (node.getKind()) {
         case STRING_LITERAL:
             refValTypeInArray = convert(String.class.toString().split(" ")[1]);
