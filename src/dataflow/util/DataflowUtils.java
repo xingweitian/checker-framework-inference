@@ -15,7 +15,7 @@ import org.checkerframework.javacutil.BugInCF;
 
 import com.sun.source.tree.LiteralTree;
 
-import dataflow.qual.DataFlow;
+import dataflow.qual.RefVal;
 
 /**
  * Utility class for Dataflow type system.
@@ -48,7 +48,7 @@ public class DataflowUtils {
 
     public static AnnotationMirror createDataflowAnnotationForByte(String[] dataType,
             ProcessingEnvironment processingEnv) {
-        AnnotationBuilder builder = new AnnotationBuilder(processingEnv, DataFlow.class);
+        AnnotationBuilder builder = new AnnotationBuilder(processingEnv, RefVal.class);
         builder.setValue("typeNameRoots", dataType);
         return builder.build();
     }
@@ -79,28 +79,28 @@ public class DataflowUtils {
 
     public static AnnotationMirror createDataflowAnnotation(Set<String> datatypes,
             ProcessingEnvironment processingEnv) {
-        AnnotationBuilder builder = new AnnotationBuilder(processingEnv, DataFlow.class);
+        AnnotationBuilder builder = new AnnotationBuilder(processingEnv, RefVal.class);
 
         return createDataflowAnnotation(datatypes, builder);
     }
 
     public static AnnotationMirror createDataflowAnnotationWithoutName(Set<String> roots,
             ProcessingEnvironment processingEnv) {
-        AnnotationBuilder builder = new AnnotationBuilder(processingEnv, DataFlow.class);
+        AnnotationBuilder builder = new AnnotationBuilder(processingEnv, RefVal.class);
         return createDataflowAnnotationWithoutName(roots, builder);
 
     }
 
     public static AnnotationMirror createDataflowAnnotation(String[] dataType,
             ProcessingEnvironment processingEnv) {
-        AnnotationBuilder builder = new AnnotationBuilder(processingEnv, DataFlow.class);
+        AnnotationBuilder builder = new AnnotationBuilder(processingEnv, RefVal.class);
         builder.setValue("typeNames", dataType);
         return builder.build();
     }
 
     public static AnnotationMirror createDataflowAnnotationWithRoots(Set<String> datatypes,
             Set<String> datatypesRoots, ProcessingEnvironment processingEnv) {
-        AnnotationBuilder builder = new AnnotationBuilder(processingEnv, DataFlow.class);
+        AnnotationBuilder builder = new AnnotationBuilder(processingEnv, RefVal.class);
         return createDataflowAnnotationWithRoots(datatypes, datatypesRoots, builder);
     }
 

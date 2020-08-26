@@ -37,8 +37,8 @@ import com.sun.source.tree.NewArrayTree;
 import com.sun.source.tree.NewClassTree;
 import com.sun.source.tree.Tree.Kind;
 
-import dataflow.qual.DataFlow;
-import dataflow.qual.DataFlowTop;
+import dataflow.qual.RefVal;
+import dataflow.qual.UnknownRefVal;
 import dataflow.util.DataflowUtils;
 
 /**
@@ -51,7 +51,7 @@ import dataflow.util.DataflowUtils;
  */
 public class DataflowAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
-    protected final AnnotationMirror DATAFLOW, DATAFLOWBOTTOM, DATAFLOWTOP;
+    protected final AnnotationMirror REFVAL, BOTTOMREFVAL, UnknownREFVAL;
     /**
      * For each Java type is present in the target program, typeNamesMap maps
      * String of the type to the TypeMirror.
@@ -60,9 +60,9 @@ public class DataflowAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
     public DataflowAnnotatedTypeFactory(BaseTypeChecker checker) {
         super(checker);
-        DATAFLOW = AnnotationBuilder.fromClass(elements, DataFlow.class);
-        DATAFLOWBOTTOM = DataflowUtils.createDataflowAnnotation(DataflowUtils.convert(""), processingEnv);
-        DATAFLOWTOP = AnnotationBuilder.fromClass(elements, DataFlowTop.class);
+        REFVAL = AnnotationBuilder.fromClass(elements, RefVal.class);
+        BOTTOMREFVAL = DataflowUtils.createDataflowAnnotation(DataflowUtils.convert(""), processingEnv);
+        UnknownREFVAL = AnnotationBuilder.fromClass(elements, UnknownRefVal.class);
         postInit();
     }
 
@@ -73,13 +73,13 @@ public class DataflowAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
     @Override
     public QualifierHierarchy createQualifierHierarchy(MultiGraphFactory factory) {
-        return new DataFlowQualifierHierarchy(factory, DATAFLOWBOTTOM);
+        return new DataFlowQualifierHierarchy(factory, BOTTOMREFVAL);
     }
 
     /**
      * This method handles autoboxing for primitive type.
      * For statements, Integer i = 3;
-     * The annotation for i should be @DataFlow(typeNames = {"Integer"}).
+     * The annotation for i should be @RefVal(typeNames = {"Integer"}).
      */
     @Override
     public AnnotatedDeclaredType getBoxedType(AnnotatedPrimitiveType type) {
@@ -94,7 +94,7 @@ public class DataflowAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     /**
      * This method handles unboxing for reference type.
      * For statements, int i = new Integer(3);
-     * The annotation for i should be @DataFlow(typeNames = {"int"}).
+     * The annotation for i should be @RefVal(typeNames = {"int"}).
      */
     @Override
     public AnnotatedPrimitiveType getUnboxedType(AnnotatedDeclaredType type)
@@ -175,16 +175,16 @@ public class DataflowAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
         @Override
         public boolean isSubtype(AnnotationMirror rhs, AnnotationMirror lhs) {
-            if (AnnotationUtils.areSameByName(rhs, DATAFLOW)
-                    && AnnotationUtils.areSameByName(lhs, DATAFLOW)) {
+            if (AnnotationUtils.areSameByName(rhs, REFVAL)
+                    && AnnotationUtils.areSameByName(lhs, REFVAL)) {
                 return isSubtypeWithRoots(rhs, lhs);
                 // return isSubtypeWithoutRoots(rhs, lhs);
             } else {
                 // if (rhs != null && lhs != null)
-                if (AnnotationUtils.areSameByName(rhs, DATAFLOW)) {
-                    rhs = DATAFLOW;
-                } else if (AnnotationUtils.areSameByName(lhs, DATAFLOW)) {
-                    lhs = DATAFLOW;
+                if (AnnotationUtils.areSameByName(rhs, REFVAL)) {
+                    rhs = REFVAL;
+                } else if (AnnotationUtils.areSameByName(lhs, REFVAL)) {
+                    lhs = REFVAL;
                 }
                 return super.isSubtype(rhs, lhs);
             }

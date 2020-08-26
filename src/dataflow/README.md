@@ -79,7 +79,7 @@ whole string is used.
 If you compare the original source code with the source code generated
 by the third step, you can find the string field
 `thisIsString` and `thisShouldbeString` are annotated with
-`@DataFlow(typeNames={"java.lang.String"})` in the new source code, although the declared type of `thisShouldbeString` is `Object`.
+`@RefVal(typeNames={"java.lang.String"})` in the new source code, although the declared type of `thisShouldbeString` is `Object`.
 
 Alternatively, you can simply execute `sh ./runDataflowSolver.sh` under `/the/path/to/checker-framework-inference/testing/dataflowexample` to run the dataflow example.  
 

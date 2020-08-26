@@ -26,7 +26,7 @@ import checkers.inference.model.Slot;
 import checkers.inference.solver.constraintgraph.ConstraintGraph;
 import checkers.inference.solver.constraintgraph.GraphBuilder;
 import checkers.inference.solver.constraintgraph.Vertex;
-import dataflow.qual.DataFlow;
+import dataflow.qual.RefVal;
 import dataflow.util.DataflowUtils;
 
 /**
@@ -46,7 +46,7 @@ public class DataflowSolver implements InferenceSolver {
                                  ProcessingEnvironment processingEnvironment) {
 
         Elements elements = processingEnvironment.getElementUtils();
-        DATAFLOW = AnnotationBuilder.fromClass(elements, DataFlow.class);
+        DATAFLOW = AnnotationBuilder.fromClass(elements, RefVal.class);
         GraphBuilder graphBuilder = new GraphBuilder(slots, constraints);
         ConstraintGraph constraintGraph = graphBuilder.buildGraph();
 

@@ -1,7 +1,7 @@
-import dataflow.qual.DataFlow;
+import dataflow.qual.RefVal;
 
 public class TestIntInvalid {
 
     // :: error: (assignment.type.incompatible)
-    @DataFlow(typeNames = {"float"}) int invalidInteger = 3;
+    @RefVal(typeNames = {"float"}) int invalidInteger = 3;
 }

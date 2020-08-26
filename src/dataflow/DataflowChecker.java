@@ -11,8 +11,8 @@ import checkers.inference.InferenceChecker;
 import checkers.inference.InferrableChecker;
 import checkers.inference.SlotManager;
 import checkers.inference.model.ConstraintManager;
-import dataflow.qual.DataFlow;
-import dataflow.qual.DataFlowTop;
+import dataflow.qual.RefVal;
+import dataflow.qual.UnknownRefVal;
 
 /**
  * Checker for Dataflow type system.
@@ -21,7 +21,7 @@ import dataflow.qual.DataFlowTop;
  *
  */
 public class DataflowChecker extends BaseInferrableChecker {
-    public AnnotationMirror DATAFLOW, DATAFLOWTOP;
+    public AnnotationMirror REFVAL, UNKNOWNREFVAL;
 
     @Override
     public void initChecker() {
@@ -31,8 +31,8 @@ public class DataflowChecker extends BaseInferrableChecker {
 
     protected void setAnnotations() {
         final Elements elements = processingEnv.getElementUtils();
-        DATAFLOW = AnnotationBuilder.fromClass(elements, DataFlow.class);
-        DATAFLOWTOP = AnnotationBuilder.fromClass(elements, DataFlowTop.class);
+        REFVAL = AnnotationBuilder.fromClass(elements, RefVal.class);
+        UNKNOWNREFVAL = AnnotationBuilder.fromClass(elements, UnknownRefVal.class);
     }
 
     @Override

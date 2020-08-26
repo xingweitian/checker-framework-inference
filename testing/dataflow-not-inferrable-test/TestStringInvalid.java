@@ -1,7 +1,7 @@
-import dataflow.qual.DataFlow;
+import dataflow.qual.RefVal;
 
 public class TestStringInvalid {
 
     // :: error: (assignment.type.incompatible)
-    @DataFlow(typeNames = {"java.lang.Object"}) String invalidString = "I am a String!";
+    @RefVal(typeNames = {"java.lang.Object"}) String invalidString = "I am a String!";
 }

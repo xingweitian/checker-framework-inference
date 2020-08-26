@@ -15,7 +15,7 @@ import checkers.inference.InferenceMain;
 import checkers.inference.model.ConstantSlot;
 import checkers.inference.model.Constraint;
 import checkers.inference.model.serialization.CnfVecIntSerializer;
-import dataflow.qual.DataFlowTop;
+import dataflow.qual.UnknownRefVal;
 import dataflow.util.DataflowUtils;
 
 public class DataflowSerializer extends CnfVecIntSerializer {
@@ -37,7 +37,7 @@ public class DataflowSerializer extends CnfVecIntSerializer {
     }
 
     private boolean annoIsPresented(AnnotationMirror anno) {
-        if (AnnotationUtils.areSameByClass(anno, DataFlowTop.class)) {
+        if (AnnotationUtils.areSameByClass(anno, UnknownRefVal.class)) {
             return true;
         }
         String[] datatypes;

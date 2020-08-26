@@ -1,7 +1,7 @@
-import dataflow.qual.DataFlow;
+import dataflow.qual.RefVal;
 
 public class TestCharInvalid {
 
     // :: error: (assignment.type.incompatible)
-    @DataFlow(typeNames = {"int"}) char invalidChar = 'L';
+    @RefVal(typeNames = {"int"}) char invalidChar = 'L';
 }

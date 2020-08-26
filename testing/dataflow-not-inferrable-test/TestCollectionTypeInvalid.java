@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
-import dataflow.qual.DataFlow;
+import dataflow.qual.RefVal;
 
 public class TestCollectionTypeInvalid {
 
-    @DataFlow(typeNames = {"java.util.ArrayList<Object>"})
+    @RefVal(typeNames = {"java.util.ArrayList<Object>"})
     // :: error: (assignment.type.incompatible)
     ArrayList invalidCollection = new ArrayList<String>();
 }

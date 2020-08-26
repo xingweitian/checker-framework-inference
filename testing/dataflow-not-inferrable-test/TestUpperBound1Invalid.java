@@ -1,8 +1,8 @@
-import dataflow.qual.DataFlow;
+import dataflow.qual.RefVal;
 
 public class TestUpperBound1Invalid {
 
-    public @DataFlow(typeNames = {"float"})
+    public @RefVal(typeNames = {"float"})
     int invalidUpperBound(int c) {
         // :: error: (return.type.incompatible)
         return 3;

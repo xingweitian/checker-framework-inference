@@ -1,8 +1,8 @@
-import dataflow.qual.DataFlow;
+import dataflow.qual.RefVal;
 
 public class TestUpperBound3Invalid {
 
-    public @DataFlow(typeNames = {"float", "java.lang.String"})
+    public @RefVal(typeNames = {"float", "java.lang.String"})
     Object invalidUpperBound(int c) {
         if (c > 0) {
             // :: error: (return.type.incompatible)

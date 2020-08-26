@@ -29,13 +29,12 @@ import checkers.inference.solver.frontend.Lattice;
 import checkers.inference.solver.frontend.LatticeBuilder;
 import checkers.inference.solver.frontend.TwoQualifiersLattice;
 import checkers.inference.solver.strategy.GraphSolvingStrategy;
-import checkers.inference.solver.util.PrintUtils;
 import checkers.inference.solver.util.SolverEnvironment;
 import checkers.inference.solver.util.Statistics;
 import dataflow.DataflowAnnotatedTypeFactory;
-import dataflow.qual.DataFlow;
-import dataflow.qual.DataFlowInferenceBottom;
-import dataflow.qual.DataFlowTop;
+import dataflow.qual.RefVal;
+import dataflow.qual.BottomRefVal;
+import dataflow.qual.UnknownRefVal;
 import dataflow.util.DataflowUtils;
 
 public class DataflowGraphSolvingStrategy extends GraphSolvingStrategy {
@@ -56,27 +55,27 @@ public class DataflowGraphSolvingStrategy extends GraphSolvingStrategy {
     @Override
     protected List<Solver<?>> separateGraph(SolverEnvironment solverEnvironment, ConstraintGraph constraintGraph,
             Collection<Slot> slots, Collection<Constraint> constraints, Lattice lattice) {
-        AnnotationMirror DATAFLOW = AnnotationBuilder.fromClass(processingEnvironment.getElementUtils(), DataFlow.class);
-        AnnotationMirror DATAFLOWBOTTOM = AnnotationBuilder.fromClass(processingEnvironment.getElementUtils(),
-                DataFlowInferenceBottom.class);
+        AnnotationMirror REFVAL = AnnotationBuilder.fromClass(processingEnvironment.getElementUtils(), RefVal.class);
+        AnnotationMirror BOTTOMREFVAL = AnnotationBuilder.fromClass(processingEnvironment.getElementUtils(),
+                BottomRefVal.class);
 
         List<Solver<?>> solvers = new ArrayList<>();
         Statistics.addOrIncrementEntry("graph_size", constraintGraph.getConstantPath().size());
 
         for (Map.Entry<Vertex, Set<Constraint>> entry : constraintGraph.getConstantPath().entrySet()) {
             AnnotationMirror anno = entry.getKey().getValue();
-            if (AnnotationUtils.areSameByName(anno, DATAFLOW)) {
+            if (AnnotationUtils.areSameByName(anno, REFVAL)) {
                 String[] dataflowValues = DataflowUtils.getTypeNames(anno);
                 String[] dataflowRoots = DataflowUtils.getTypeNameRoots(anno);
                 if (dataflowValues.length == 1) {
-                    AnnotationMirror DATAFLOWTOP = DataflowUtils.createDataflowAnnotation(
+                    AnnotationMirror UNKNOWNREFVAL = DataflowUtils.createDataflowAnnotation(
                             DataflowUtils.convert(dataflowValues), processingEnvironment);
-                    TwoQualifiersLattice latticeFor2 = new LatticeBuilder().buildTwoTypeLattice(DATAFLOWTOP, DATAFLOWBOTTOM);
+                    TwoQualifiersLattice latticeFor2 = new LatticeBuilder().buildTwoTypeLattice(UNKNOWNREFVAL, BOTTOMREFVAL);
                     solvers.add(solverFactory.createSolver(solverEnvironment, slots, entry.getValue(), latticeFor2));
                 } else if (dataflowRoots.length == 1) {
-                    AnnotationMirror DATAFLOWTOP = DataflowUtils.createDataflowAnnotationForByte(
+                    AnnotationMirror UNKNOWNREFVAL = DataflowUtils.createDataflowAnnotationForByte(
                             DataflowUtils.convert(dataflowRoots), processingEnvironment);
-                    TwoQualifiersLattice latticeFor2 = new LatticeBuilder().buildTwoTypeLattice(DATAFLOWTOP, DATAFLOWBOTTOM);
+                    TwoQualifiersLattice latticeFor2 = new LatticeBuilder().buildTwoTypeLattice(UNKNOWNREFVAL, BOTTOMREFVAL);
                     solvers.add(solverFactory.createSolver(solverEnvironment, slots, entry.getValue(), latticeFor2));
                 }
             }
@@ -88,9 +87,9 @@ public class DataflowGraphSolvingStrategy extends GraphSolvingStrategy {
     @Override
     protected ConstraintGraph generateGraph(Collection<Slot> slots, Collection<Constraint> constraints,
             ProcessingEnvironment processingEnvironment) {
-        AnnotationMirror DATAFLOWTOP = AnnotationBuilder.fromClass(
-                processingEnvironment.getElementUtils(), DataFlowTop.class);
-        GraphBuilder graphBuilder = new GraphBuilder(slots, constraints, DATAFLOWTOP);
+        AnnotationMirror UNKNOWNREFVAL = AnnotationBuilder.fromClass(
+                processingEnvironment.getElementUtils(), UnknownRefVal.class);
+        GraphBuilder graphBuilder = new GraphBuilder(slots, constraints, UNKNOWNREFVAL);
         ConstraintGraph constraintGraph = graphBuilder.buildGraph();
         return constraintGraph;
     }
@@ -106,7 +105,7 @@ public class DataflowGraphSolvingStrategy extends GraphSolvingStrategy {
                 for (Map.Entry<Integer, AnnotationMirror> entry : inferenceSolutionMap.entrySet()) {
                     Integer id = entry.getKey();
                     AnnotationMirror dataflowAnno = entry.getValue();
-                    if (AnnotationUtils.areSameByClass(dataflowAnno, DataFlow.class)) {
+                    if (AnnotationUtils.areSameByClass(dataflowAnno, RefVal.class)) {
                         Set<AnnotationMirror> datas = dataflowResults.get(id);
                         if (datas == null) {
                             datas = AnnotationUtils.createAnnotationSet();

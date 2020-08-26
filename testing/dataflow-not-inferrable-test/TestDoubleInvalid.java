@@ -1,7 +1,7 @@
-import dataflow.qual.DataFlow;
+import dataflow.qual.RefVal;
 
 public class TestDoubleInvalid {
 
     // :: error: (assignment.type.incompatible)
-    @DataFlow(typeNames = {"int"}) double invalidDouble = 3.14;
+    @RefVal(typeNames = {"int"}) double invalidDouble = 3.14;
 }

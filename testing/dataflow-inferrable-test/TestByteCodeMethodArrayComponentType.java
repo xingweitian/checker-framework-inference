@@ -5,13 +5,13 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dataflow.qual.DataFlow;
+import dataflow.qual.RefVal;
 
 class TestByteCodeMethodArrayComponentType {
 
     public void test(String path) {
         // :: fixable-error: (assignment.type.incompatible)
-        @DataFlow(typeNameRoots = {"java.lang.String"}) String str = getPath(path);
+        @RefVal(typeNameRoots = {"java.lang.String"}) String str = getPath(path);
     }
 
     public String getPath(String pathPart) {
