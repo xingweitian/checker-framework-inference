@@ -272,7 +272,7 @@ task testCheckerInferenceDevScript(type: Exec, dependsOn: [dist, dependenciesJar
 
 task testRefValExternalSolvers(type: Exec, dependsOn: [dist, dependenciesJar]) {
     description 'Test Reference Value type system on its external solvers Lingeling and LogicBlox'
-    executable './testing/refvalexample/travis-test.sh'
+    executable './testing/refval-example/travis-test.sh'
 }
 
 afterEvaluate {
