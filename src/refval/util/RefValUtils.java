@@ -46,42 +46,42 @@ public class RefValUtils {
         return allTypesInArray;
     }
 
-    public static AnnotationMirror createRefValAnnotationForByte(String[] dataType,
+    public static AnnotationMirror createRefValAnnotationForByte(String[] refValType,
             ProcessingEnvironment processingEnv) {
         AnnotationBuilder builder = new AnnotationBuilder(processingEnv, RefVal.class);
-        builder.setValue("typeNameRoots", dataType);
+        builder.setValue("typeNameRoots", refValType);
         return builder.build();
     }
 
-    private static AnnotationMirror createRefValAnnotation(final Set<String> datatypes,
+    private static AnnotationMirror createRefValAnnotation(final Set<String> refValTypes,
             final AnnotationBuilder builder) {
-        String[] datatypesInArray = new String[datatypes.size()];
+        String[] refValTypesInArray = new String[refValTypes.size()];
         int i = 0;
-        for (String datatype : datatypes) {
-            datatypesInArray[i] = datatype;
+        for (String refValType : refValTypes) {
+            refValTypesInArray[i] = refValType;
             i++;
         }
-        builder.setValue("typeNames", datatypesInArray);
+        builder.setValue("typeNames", refValTypesInArray);
         return builder.build();
     }
 
     private static AnnotationMirror createRefValAnnotationWithoutName(final Set<String> roots,
             final AnnotationBuilder builder) {
-        String[] datatypesInArray = new String[roots.size()];
+        String[] refValTypesInArray = new String[roots.size()];
         int i = 0;
-        for (String datatype : roots) {
-            datatypesInArray[i] = datatype;
+        for (String refValType : roots) {
+            refValTypesInArray[i] = refValType;
             i++;
         }
-        builder.setValue("typeNameRoots", datatypesInArray);
+        builder.setValue("typeNameRoots", refValTypesInArray);
         return builder.build();
     }
 
-    public static AnnotationMirror createRefValAnnotation(Set<String> datatypes,
+    public static AnnotationMirror createRefValAnnotation(Set<String> refValTypes,
             ProcessingEnvironment processingEnv) {
         AnnotationBuilder builder = new AnnotationBuilder(processingEnv, RefVal.class);
 
-        return createRefValAnnotation(datatypes, builder);
+        return createRefValAnnotation(refValTypes, builder);
     }
 
     public static AnnotationMirror createRefValAnnotationWithoutName(Set<String> roots,
@@ -91,39 +91,39 @@ public class RefValUtils {
 
     }
 
-    public static AnnotationMirror createRefValAnnotation(String[] dataType,
+    public static AnnotationMirror createRefValAnnotation(String[] refValType,
             ProcessingEnvironment processingEnv) {
         AnnotationBuilder builder = new AnnotationBuilder(processingEnv, RefVal.class);
-        builder.setValue("typeNames", dataType);
+        builder.setValue("typeNames", refValType);
         return builder.build();
     }
 
-    public static AnnotationMirror createRefValAnnotationWithRoots(Set<String> datatypes,
-            Set<String> datatypesRoots, ProcessingEnvironment processingEnv) {
+    public static AnnotationMirror createRefValAnnotationWithRoots(Set<String> refValTypes,
+            Set<String> refValTypesRoots, ProcessingEnvironment processingEnv) {
         AnnotationBuilder builder = new AnnotationBuilder(processingEnv, RefVal.class);
-        return createRefValAnnotationWithRoots(datatypes, datatypesRoots, builder);
+        return createRefValAnnotationWithRoots(refValTypes, refValTypesRoots, builder);
     }
 
-    private static AnnotationMirror createRefValAnnotationWithRoots(final Set<String> datatypes,
-            final Set<String> datatypesRoots, final AnnotationBuilder builder) {
-        String[] refTypesInArray = new String[datatypes.size()];
+    private static AnnotationMirror createRefValAnnotationWithRoots(final Set<String> refValTypes,
+            final Set<String> refValTypesRoots, final AnnotationBuilder builder) {
+        String[] refValTypesInArray = new String[refValTypes.size()];
         int i = 0;
-        for (String datatype : datatypes) {
-            refTypesInArray[i] = datatype;
+        for (String refValType : refValTypes) {
+            refValTypesInArray[i] = refValType;
             i++;
         }
 
-        String[] refTypesRootInArray = new String[datatypesRoots.size()];
+        String[] refValTypesRootInArray = new String[refValTypesRoots.size()];
         int j = 0;
-        for (String refTypesRoot : datatypesRoots) {
-            refTypesRootInArray[j] = refTypesRoot;
+        for (String refValTypesRoot : refValTypesRoots) {
+            refValTypesRootInArray[j] = refValTypesRoot;
             j++;
         }
-        if (refTypesRootInArray.length > 0) {
-            builder.setValue("typeNameRoots", refTypesRootInArray);
+        if (refValTypesRootInArray.length > 0) {
+            builder.setValue("typeNameRoots", refValTypesRootInArray);
         }
-        if (refTypesInArray.length > 0) {
-            builder.setValue("typeNames", refTypesInArray);
+        if (refValTypesInArray.length > 0) {
+            builder.setValue("typeNames", refValTypesInArray);
         }
 
         return builder.build();
@@ -148,35 +148,35 @@ public class RefValUtils {
 
     public static AnnotationMirror generateRefValAnnoFromLiteral(AnnotatedTypeMirror type,
             ProcessingEnvironment processingEnv) {
-        String refTypeInArray[] = convert(type.getUnderlyingType().toString());
-        AnnotationMirror refValType = createRefValAnnotation(refTypeInArray, processingEnv);
+        String refValTypeInArray[] = convert(type.getUnderlyingType().toString());
+        AnnotationMirror refValType = createRefValAnnotation(refValTypeInArray, processingEnv);
         return refValType;
     }
 
     public static AnnotationMirror generateRefValAnnoFromLiteral(LiteralTree node,
             ProcessingEnvironment processingEnv) {
-        String datatypeInArray[] = { "" };
+        String refValTypeInArray[] = { "" };
         switch (node.getKind()) {
         case STRING_LITERAL:
-            datatypeInArray = convert(String.class.toString().split(" ")[1]);
+            refValTypeInArray = convert(String.class.toString().split(" ")[1]);
             break;
         case INT_LITERAL:
-            datatypeInArray = convert(int.class.toString());
+            refValTypeInArray = convert(int.class.toString());
             break;
         case LONG_LITERAL:
-            datatypeInArray = convert(long.class.toString());
+            refValTypeInArray = convert(long.class.toString());
             break;
         case FLOAT_LITERAL:
-            datatypeInArray = convert(float.class.toString());
+            refValTypeInArray = convert(float.class.toString());
             break;
         case DOUBLE_LITERAL:
-            datatypeInArray = convert(double.class.toString());
+            refValTypeInArray = convert(double.class.toString());
             break;
         case BOOLEAN_LITERAL:
-            datatypeInArray = convert(boolean.class.toString());
+            refValTypeInArray = convert(boolean.class.toString());
             break;
         case CHAR_LITERAL:
-            datatypeInArray = convert(char.class.toString());
+            refValTypeInArray = convert(char.class.toString());
             break;
         case NULL_LITERAL:
             // Null literal wouldn't be passed here.
@@ -184,7 +184,7 @@ public class RefValUtils {
         default:
             throw new BugInCF("Unknown literal tree: " + node.getKind().toString());
         }
-        return createRefValAnnotation(datatypeInArray, processingEnv);
+        return createRefValAnnotation(refValTypeInArray, processingEnv);
     }
 
     public static String[] convert(String... typeName) {
