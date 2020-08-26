@@ -71,7 +71,7 @@ public class RefValSolver implements InferenceSolver {
         List<RefValTypeSolution> solutions = new ArrayList<>();
         try {
             if (refValSolvers.size() > 0) {
-                solutions = solveInparallel(refValSolvers);
+                solutions = solveInParallel(refValSolvers);
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -80,7 +80,7 @@ public class RefValSolver implements InferenceSolver {
         return getMergedResultFromSolutions(processingEnvironment, solutions);
     }
 
-    private List<RefValTypeSolution> solveInparallel(List<RefValTypeSolver> refValSolvers)
+    private List<RefValTypeSolution> solveInParallel(List<RefValTypeSolver> refValSolvers)
             throws InterruptedException, ExecutionException {
         ExecutorService service = Executors.newFixedThreadPool(refValSolvers.size());
 

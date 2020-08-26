@@ -56,7 +56,7 @@ public class RefValAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
      * For each Java type is present in the target program, typeNamesMap maps
      * String of the type to the TypeMirror.
      */
-    private final Map<String, TypeMirror> typeNamesMap = new HashMap<String, TypeMirror>();
+    private final Map<String, TypeMirror> typeNamesMap = new HashMap<>();
 
     public RefValAnnotatedTypeFactory(BaseTypeChecker checker) {
         super(checker);
@@ -124,18 +124,18 @@ public class RefValAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
          */
         private boolean isSubtypeWithRoots(AnnotationMirror rhs, AnnotationMirror lhs) {
 
-            Set<String> rTypeNamesSet = new HashSet<String>(Arrays.asList(RefValUtils
+            Set<String> rTypeNamesSet = new HashSet<>(Arrays.asList(RefValUtils
                     .getTypeNames(rhs)));
-            Set<String> lTypeNamesSet = new HashSet<String>(Arrays.asList(RefValUtils
+            Set<String> lTypeNamesSet = new HashSet<>(Arrays.asList(RefValUtils
                     .getTypeNames(lhs)));
-            Set<String> rRootsSet = new HashSet<String>(Arrays.asList(RefValUtils
+            Set<String> rRootsSet = new HashSet<>(Arrays.asList(RefValUtils
                     .getTypeNameRoots(rhs)));
-            Set<String> lRootsSet = new HashSet<String>(Arrays.asList(RefValUtils
+            Set<String> lRootsSet = new HashSet<>(Arrays.asList(RefValUtils
                     .getTypeNameRoots(lhs)));
-            Set<String> combinedTypeNames = new HashSet<String>();
+            Set<String> combinedTypeNames = new HashSet<>();
             combinedTypeNames.addAll(rTypeNamesSet);
             combinedTypeNames.addAll(lTypeNamesSet);
-            Set<String> combinedRoots = new HashSet<String>();
+            Set<String> combinedRoots = new HashSet<>();
             combinedRoots.addAll(rRootsSet);
             combinedRoots.addAll(lRootsSet);
 
@@ -144,11 +144,7 @@ public class RefValAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
             AnnotationMirror refinedCombinedAnno = refineRefVal(combinedAnno);
             AnnotationMirror refinedLhs = refineRefVal(lhs);
 
-            if (AnnotationUtils.areSame(refinedCombinedAnno, refinedLhs)) {
-                return true;
-            } else {
-                return false;
-            }
+            return AnnotationUtils.areSame(refinedCombinedAnno, refinedLhs);
         }
 
         /**
@@ -162,15 +158,11 @@ public class RefValAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
          * @return true is rhs is subtype of lhs, otherwise return false.
          */
         private boolean isSubtypeWithoutRoots(AnnotationMirror rhs, AnnotationMirror lhs) {
-            Set<String> rTypeNamesSet = new HashSet<String>(Arrays.asList(RefValUtils
+            Set<String> rTypeNamesSet = new HashSet<>(Arrays.asList(RefValUtils
                     .getTypeNames(rhs)));
-            Set<String> lTypeNamesSet = new HashSet<String>(Arrays.asList(RefValUtils
+            Set<String> lTypeNamesSet = new HashSet<>(Arrays.asList(RefValUtils
                     .getTypeNames(lhs)));
-            if (lTypeNamesSet.containsAll(rTypeNamesSet)) {
-                return true;
-            } else {
-                return false;
-            }
+            return lTypeNamesSet.containsAll(rTypeNamesSet);
         }
 
         @Override
@@ -180,7 +172,8 @@ public class RefValAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 return isSubtypeWithRoots(rhs, lhs);
                 // return isSubtypeWithoutRoots(rhs, lhs);
             } else {
-                // if (rhs != null && lhs != null)
+                // Remove typeNames and typeNameRoots from @RefVal
+                // to make it in the subtype hierarchy
                 if (AnnotationUtils.areSameByName(rhs, REFVAL)) {
                     rhs = REFVAL;
                 } else if (AnnotationUtils.areSameByName(lhs, REFVAL)) {
@@ -219,9 +212,8 @@ public class RefValAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         @Override
         public Void visitLiteral(LiteralTree node, AnnotatedTypeMirror type) {
             if (!node.getKind().equals(Kind.NULL_LITERAL)) {
-                AnnotatedTypeMirror annoType = type;
-                AnnotationMirror refValType = RefValUtils.generateRefValAnnoFromLiteral(annoType,
-                        processingEnv);
+                AnnotationMirror refValType = RefValUtils.generateRefValAnnoFromLiteral(type,
+                    processingEnv);
                 type.replaceAnnotation(refValType);
             }
             return super.visitLiteral(node, type);
@@ -253,33 +245,33 @@ public class RefValAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
      */
     public AnnotationMirror refineRefVal(AnnotationMirror type) {
         String[] typeNameRoots = RefValUtils.getTypeNameRoots(type);
-        Set<String> refinedRoots = new HashSet<String>();
+        Set<String> refinedRoots = new HashSet<>();
 
-        if (typeNameRoots.length == 0) {
-
-        } else if (typeNameRoots.length == 1) {
-            refinedRoots.add(typeNameRoots[0]);
-        } else {
-            List<String> rootsList = new ArrayList<String>(Arrays.asList(typeNameRoots));
-            while (rootsList.size() != 0) {
-                TypeMirror decType = getTypeMirror(rootsList.get(0));
-                if (!isComparable(decType, rootsList)) {
-                    refinedRoots.add(rootsList.get(0));
-                    rootsList.remove(0);
+        if (typeNameRoots.length != 0) {
+            if (typeNameRoots.length == 1) {
+                refinedRoots.add(typeNameRoots[0]);
+            } else {
+                List<String> rootsList = new ArrayList<>(Arrays.asList(typeNameRoots));
+                while (rootsList.size() != 0) {
+                    TypeMirror decType = getTypeMirror(rootsList.get(0));
+                    if (!isComparable(decType, rootsList)) {
+                        refinedRoots.add(rootsList.get(0));
+                        rootsList.remove(0);
+                    }
                 }
             }
         }
 
         String[] typeNames = RefValUtils.getTypeNames(type);
         Arrays.sort(typeNames);
-        Set<String> refinedTypeNames = new HashSet<String>();
+        Set<String> refinedTypeNames = new HashSet<>();
 
         if (refinedRoots.size() == 0) {
-            refinedTypeNames = new HashSet<String>(Arrays.asList(typeNames));
+            refinedTypeNames = new HashSet<>(Arrays.asList(typeNames));
             return RefValUtils.createRefValAnnotation(refinedTypeNames, processingEnv);
         } else {
             for (String typeName : typeNames) {
-                if (typeName == "") {
+                if (typeName.equals("")) {
                     continue;
                 }
                 TypeMirror decType = getTypeMirror(typeName);
@@ -312,7 +304,7 @@ public class RefValAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
     private boolean isComparable(TypeMirror decType, List<String> rootsList) {
         for (int i = 1; i < rootsList.size(); i++) {
-            if (rootsList.get(i) == "") {
+            if (rootsList.get(i).equals("")) {
                 continue;
             }
             TypeMirror comparedDecType = getTypeMirror(rootsList.get(i));
@@ -330,7 +322,7 @@ public class RefValAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
     private boolean shouldPresent(TypeMirror decType, Set<String> refinedRoots) {
         for (String refinedRoot : refinedRoots) {
-            if (refinedRoot == "") {
+            if (refinedRoot.equals("")) {
                 continue;
             }
             TypeMirror comparedDecType = getTypeMirror(refinedRoot);
@@ -344,7 +336,7 @@ public class RefValAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     }
 
     private TypeMirror getTypeMirror(String typeName) {
-        if (this.typeNamesMap.keySet().contains(typeName)) {
+        if (this.typeNamesMap.containsKey(typeName)) {
             return this.typeNamesMap.get(typeName);
         } else {
             return elements.getTypeElement(convertToReferenceType(typeName)).asType();

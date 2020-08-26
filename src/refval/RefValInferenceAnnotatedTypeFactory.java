@@ -52,8 +52,8 @@ public class RefValInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeF
         AnnotationMirror am = RefValUtils.createRefValAnnotation(typeElt.asType().toString(),
                 this.processingEnv);
         AnnotatedDeclaredType dt = fromElement(typeElt);
-        ConstantSlot cs = InferenceMain.getInstance().getSlotManager().createConstantSlot(am);
-        dt.addAnnotation(InferenceMain.getInstance().getSlotManager().getAnnotation(cs));
+        ConstantSlot cs = slotManager.createConstantSlot(am);
+        dt.addAnnotation(slotManager.getAnnotation(cs));
         dt.addAnnotation(cs.getValue());
         return dt;
     }
@@ -66,8 +66,8 @@ public class RefValInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeF
                 this.processingEnv);
         AnnotatedPrimitiveType pt = (AnnotatedPrimitiveType) AnnotatedTypeMirror.createType(
                 primitiveType, this, false);
-        ConstantSlot cs = InferenceMain.getInstance().getSlotManager().createConstantSlot(am);
-        pt.addAnnotation(InferenceMain.getInstance().getSlotManager().getAnnotation(cs));
+        ConstantSlot cs = slotManager.createConstantSlot(am);
+        pt.addAnnotation(slotManager.getAnnotation(cs));
         pt.addAnnotation(cs.getValue());
         return pt;
     }
