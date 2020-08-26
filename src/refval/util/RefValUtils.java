@@ -58,7 +58,7 @@ public class RefValUtils {
         String[] datatypesInArray = new String[datatypes.size()];
         int i = 0;
         for (String datatype : datatypes) {
-            datatypesInArray[i] = datatype.toString();
+            datatypesInArray[i] = datatype;
             i++;
         }
         builder.setValue("typeNames", datatypesInArray);
@@ -70,7 +70,7 @@ public class RefValUtils {
         String[] datatypesInArray = new String[roots.size()];
         int i = 0;
         for (String datatype : roots) {
-            datatypesInArray[i] = datatype.toString();
+            datatypesInArray[i] = datatype;
             i++;
         }
         builder.setValue("typeNameRoots", datatypesInArray);
@@ -109,14 +109,14 @@ public class RefValUtils {
         String[] refTypesInArray = new String[datatypes.size()];
         int i = 0;
         for (String datatype : datatypes) {
-            refTypesInArray[i] = datatype.toString();
+            refTypesInArray[i] = datatype;
             i++;
         }
 
         String[] refTypesRootInArray = new String[datatypesRoots.size()];
         int j = 0;
         for (String refTypesRoot : datatypesRoots) {
-            refTypesRootInArray[j] = refTypesRoot.toString();
+            refTypesRootInArray[j] = refTypesRoot;
             j++;
         }
         if (refTypesRootInArray.length > 0) {
@@ -184,8 +184,7 @@ public class RefValUtils {
         default:
             throw new BugInCF("Unknown literal tree: " + node.getKind().toString());
         }
-        AnnotationMirror refValType = createRefValAnnotation(datatypeInArray, processingEnv);
-        return refValType;
+        return createRefValAnnotation(datatypeInArray, processingEnv);
     }
 
     public static String[] convert(String... typeName) {
@@ -194,9 +193,8 @@ public class RefValUtils {
 
     public static AnnotationMirror createRefValAnnotation(String typeName,
             ProcessingEnvironment processingEnv) {
-        Set<String> typeNames = new HashSet<String>();
+        Set<String> typeNames = new HashSet<>();
         typeNames.add(typeName);
-        AnnotationMirror am = RefValUtils.createRefValAnnotation(typeNames, processingEnv);
-        return am;
+        return RefValUtils.createRefValAnnotation(typeNames, processingEnv);
     }
 }

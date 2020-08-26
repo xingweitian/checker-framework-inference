@@ -127,7 +127,6 @@ public class RefValInferenceTreeAnnotator extends InferenceTreeAnnotator {
 
     private void replaceATM(AnnotatedTypeMirror atm, AnnotationMirror refValAM) {
         final ConstantSlot cs = slotManager.createConstantSlot(refValAM);
-        slotManager.createConstantSlot(refValAM);
         AnnotationBuilder ab = new AnnotationBuilder(realTypeFactory.getProcessingEnv(), VarAnnot.class);
         ab.setValue("value", cs.getId());
         AnnotationMirror varAnno = ab.build();
@@ -137,7 +136,7 @@ public class RefValInferenceTreeAnnotator extends InferenceTreeAnnotator {
     /**
      * Add the bytecode default RefVal annotation for component type of the given {@link AnnotatedArrayType}.
      *
-     *<p> For multi-dimensional array, this method will recursively add bytecode default RefVal annotation to array's component type.
+     * <p> For multi-dimensional array, this method will recursively add bytecode default RefVal annotation to array's component type.
      *
      * @param arrayAtm the given {@link AnnotatedArrayType}, whose component type will be added the bytecode default.
      */
@@ -148,7 +147,7 @@ public class RefValInferenceTreeAnnotator extends InferenceTreeAnnotator {
         replaceATM(componentAtm, componentAnno);
 
         if (componentAtm.getKind() == TypeKind.ARRAY) {
-            //if component is also an array type, then recursively annotate its component also.
+            // if component is also an array type, then recursively annotate its component also.
             replaceArrayComponentATM((AnnotatedArrayType) componentAtm);
         }
     }
