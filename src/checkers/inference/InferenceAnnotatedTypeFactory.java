@@ -567,9 +567,4 @@ public class InferenceAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     protected InferenceViewpointAdapter createViewpointAdapter() {
         return withCombineConstraints ? new InferenceViewpointAdapter(this) : null;
     }
-
-    @Override
-    protected Set<? extends AnnotationMirror> getDefaultTypeDeclarationBounds() {
-        return this.getQualifierHierarchy().getTopAnnotations();
-    }
 }
