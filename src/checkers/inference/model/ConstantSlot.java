@@ -90,7 +90,7 @@ public class ConstantSlot extends VariableSlot {
 
     @Override
     public String toString() {
-        return value.toString();
+        return "Constant value: " + value.toString();
     }
 
     @Override
