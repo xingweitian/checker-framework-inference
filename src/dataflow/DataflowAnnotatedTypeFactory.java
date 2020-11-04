@@ -45,7 +45,7 @@ import dataflow.util.DataflowUtils;
  * DataflowAnnotatedTypeFactory is the type factory for Dataflow type system. It
  * defines the subtype relationship of Dataflow type system, annotate the base
  * cases, and implements simplification algorithm.
- * 
+ *
  * @author jianchu
  *
  */
@@ -117,7 +117,7 @@ public class DataflowAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         /**
          * This method checks whether rhs is subtype of lhs. rhs and lhs are
          * both Dataflow types with typeNameRoots argument.
-         * 
+         *
          * @param rhs
          * @param lhs
          * @return true is rhs is subtype of lhs, otherwise return false.
@@ -156,7 +156,7 @@ public class DataflowAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
          * both Dataflow types without typeNameRoots argument. Currently this
          * method is not used, but we can use it for a lightweight dataflow type
          * system. (One without typeNameRoots argument).
-         * 
+         *
          * @param rhs
          * @param lhs
          * @return true is rhs is subtype of lhs, otherwise return false.
@@ -244,11 +244,11 @@ public class DataflowAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
             return super.visitMethodInvocation(node, type);
         }
     }
-    
+
     /**
-     * Simplefication algoirthm.
-     * 
-     * @param type
+     * Simplification algorithm.
+     *
+     * @param type an annotation mirror to be simplified
      * @return A simplified annotation.
      */
     public AnnotationMirror refineDataflow(AnnotationMirror type) {
