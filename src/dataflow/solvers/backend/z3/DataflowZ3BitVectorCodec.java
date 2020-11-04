@@ -45,64 +45,42 @@ public class DataflowZ3BitVectorCodec implements Z3BitVectorCodec {
     DataflowZ3BitVectorCodec() {
         this.realATF = (DataflowAnnotatedTypeFactory) InferenceMain.getInstance().getRealTypeFactory();
         this.slotManager = InferenceMain.getInstance().getSlotManager();
-        this.encodingKeyArr = createEncodingKeyArr();
-        this.rootEncodingKeyArr = createRootEncodingKeyArr();
+        this.encodingKeyArr = createEncodingKeyArr(false);
+        this.rootEncodingKeyArr = createEncodingKeyArr(true);
         this.encodingValArr = createEncodingValArr(0, this.encodingKeyArr.length);
         this.rootEncodingValArr = createEncodingValArr(this.encodingKeyArr.length, this.rootEncodingKeyArr.length);
     }
 
     /**
-     * Traverse all the constant slots to get the values in typeNames of each
-     * {@code @DataFlow annotation} as the elements of encoding key array.
+     * Traverse all the constant slots to get the values in typeNames/typeNameRoots of each
+     * {@code @DataFlow} annotation as the elements of encoding key array.
      * @return the encoding key array
      */
-    private String[] createEncodingKeyArr() {
+    private String[] createEncodingKeyArr(boolean root) {
         List<ConstantSlot> slots = this.slotManager
             .getConstantSlots();
-        Set<String> typeNamesSet = new HashSet<>();
+        Set<String> set = new HashSet<>();
+        String[] types;
         for (ConstantSlot each : slots) {
             AnnotationMirror am = each.getValue();
             if (AnnotationUtils.areSameByClass(am, DataFlowInferenceBottom.class) ||
                 AnnotationUtils.areSameByClass(am, DataFlowTop.class)) {
                 continue;
             }
-            String[] typeNames = DataflowUtils.getTypeNames(am);
-            typeNamesSet.addAll(Arrays.asList(typeNames));
+            if (root) {
+                types = DataflowUtils.getTypeNameRoots(am);
+            } else {
+                types = DataflowUtils.getTypeNames(am);
+            }
+            set.addAll(Arrays.asList(types));
         }
-        String[] encodingArr = new String[typeNamesSet.size()];
+        String[] encodingArr = new String[set.size()];
         int i = 0;
-        for ( String entry : typeNamesSet) {
+        for ( String entry : set) {
             encodingArr[i] = entry;
             i++;
         }
         return encodingArr;
-    }
-
-    /**
-     * Traverse all the constant slots to get the values in typeNameRoots of each
-     * {@code @DataFlow annotation} as the elements of root encoding key array.
-     * @return the root encoding key array
-     */
-    private String[] createRootEncodingKeyArr() {
-        List<ConstantSlot> slots = this.slotManager
-            .getConstantSlots();
-        Set<String> typeNameRootsSet = new HashSet<>();
-        for (ConstantSlot each : slots) {
-            AnnotationMirror am = each.getValue();
-            if (AnnotationUtils.areSameByClass(am, DataFlowInferenceBottom.class) ||
-                AnnotationUtils.areSameByClass(am, DataFlowTop.class)) {
-                continue;
-            }
-            String[] typeNameRoots = DataflowUtils.getTypeNameRoots(am);
-            typeNameRootsSet.addAll(Arrays.asList(typeNameRoots));
-        }
-        String[] rootEncodingArr = new String[typeNameRootsSet.size()];
-        int i = 0;
-        for ( String entry : typeNameRootsSet) {
-            rootEncodingArr[i] = entry;
-            i++;
-        }
-        return rootEncodingArr;
     }
 
     /**
