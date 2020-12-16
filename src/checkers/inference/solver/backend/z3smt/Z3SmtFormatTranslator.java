@@ -1,6 +1,5 @@
 package checkers.inference.solver.backend.z3smt;
 
-import checkers.inference.model.ArithmeticVariableSlot;
 import checkers.inference.model.CombVariableSlot;
 import checkers.inference.model.ConstantSlot;
 import checkers.inference.model.ExistentialVariableSlot;
@@ -11,21 +10,24 @@ import checkers.inference.model.VariableSlot;
 import checkers.inference.solver.backend.AbstractFormatTranslator;
 import checkers.inference.solver.backend.z3smt.encoder.Z3SmtSoftConstraintEncoder;
 import checkers.inference.solver.frontend.Lattice;
+
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 
-// AbstractFormatTranslator<SlotEncodingT, ConstraintEncodingT, SlotSolutionT>
+/** {@link Z3SmtSolver}'s format translator. */
 public abstract class Z3SmtFormatTranslator<SlotEncodingT, SlotSolutionT>
         extends AbstractFormatTranslator<SlotEncodingT, BoolExpr, SlotSolutionT> {
 
+    /** The main interaction with Z3 happens via Context. */
     protected Context ctx;
-
     /** Cache of all serialized slots, keyed on slot ID. */
     protected final Map<Integer, SlotEncodingT> serializedSlots;
 
@@ -34,6 +36,7 @@ public abstract class Z3SmtFormatTranslator<SlotEncodingT, SlotSolutionT>
         serializedSlots = new HashMap<>();
     }
 
+    /** Initialize the format translator. */
     public final void init(Context ctx) {
         this.ctx = ctx;
         finishInitializingEncoders();
@@ -73,15 +76,12 @@ public abstract class Z3SmtFormatTranslator<SlotEncodingT, SlotSolutionT>
         return serializeVarSlot(slot);
     }
 
-    /**
-     * Subclasses can override this method to perform pre-analysis of slots for encoding
-     * optimization
-     */
+    /** Subclasses can override this method to perform pre-analysis of slots for encoding optimization. */
     public void preAnalyzeSlots(Collection<Slot> slots) {}
     
     protected abstract Z3SmtSoftConstraintEncoder<SlotEncodingT, SlotSolutionT> createSoftConstraintEncoder();
 
-    public abstract BoolExpr encodeSlotWellformnessConstraint(Slot slot);
+    public abstract BoolExpr encodeSlotWellFormedConstraint(Slot slot);
 
     public abstract BoolExpr encodeSlotPreferenceConstraint(Slot slot);
 
