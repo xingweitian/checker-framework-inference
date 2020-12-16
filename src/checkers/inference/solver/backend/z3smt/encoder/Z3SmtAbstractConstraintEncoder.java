@@ -10,7 +10,9 @@ import com.microsoft.z3.Context;
 public class Z3SmtAbstractConstraintEncoder<SlotEncodingT, SlotSolutionT>
         extends AbstractConstraintEncoder<BoolExpr> {
 
+    /** The main interaction with Z3 happens via Context. */
     protected final Context ctx;
+    /** The format translator to use. */
     protected final Z3SmtFormatTranslator<SlotEncodingT, SlotSolutionT> z3SmtFormatTranslator;
 
     public Z3SmtAbstractConstraintEncoder(
