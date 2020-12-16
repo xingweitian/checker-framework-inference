@@ -6,8 +6,14 @@ import checkers.inference.solver.backend.AbstractSolverFactory;
 import checkers.inference.solver.backend.Solver;
 import checkers.inference.solver.frontend.Lattice;
 import checkers.inference.solver.util.SolverEnvironment;
+
 import java.util.Collection;
 
+/**
+ * The factory class for creating an underlying z3 solver. Users should override {@link
+ * #createSolver(SolverEnvironment, Collection, Collection, Lattice)} to choose a different solver
+ * if needed.
+ */
 public abstract class Z3SmtSolverFactory<SlotEncodingT, SlotSolutionT>
         extends AbstractSolverFactory<Z3SmtFormatTranslator<SlotEncodingT, SlotSolutionT>> {
 
