@@ -6,7 +6,7 @@ import checkers.inference.solver.frontend.Lattice;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 
-/** Abstract base class for every Z3Int constraint encoders. */
+/** Abstract base class for every z3 constraint encoders. */
 public class Z3SmtAbstractConstraintEncoder<SlotEncodingT, SlotSolutionT>
         extends AbstractConstraintEncoder<BoolExpr> {
 

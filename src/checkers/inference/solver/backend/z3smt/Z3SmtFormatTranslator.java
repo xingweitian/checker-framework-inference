@@ -42,8 +42,10 @@ public abstract class Z3SmtFormatTranslator<SlotEncodingT, SlotSolutionT>
         finishInitializingEncoders();
     }
 
+    /** Subclasses need to override this method to indicate how to serialize variable slots. */
     protected abstract SlotEncodingT serializeVarSlot(Slot slot);
 
+    /** Subclasses need to override this method to indicate how to serialize constant slots. */
     protected abstract SlotEncodingT serializeConstantSlot(ConstantSlot slot);
 
     @Override
@@ -78,13 +80,17 @@ public abstract class Z3SmtFormatTranslator<SlotEncodingT, SlotSolutionT>
 
     /** Subclasses can override this method to perform pre-analysis of slots for encoding optimization. */
     public void preAnalyzeSlots(Collection<Slot> slots) {}
-    
+
+    /** Subclasses need to override this method to indicate which soft constraint encode should be use. */
     protected abstract Z3SmtSoftConstraintEncoder<SlotEncodingT, SlotSolutionT> createSoftConstraintEncoder();
 
+    /** Subclasses need to override this method to indicate how to encode slot well-formed constraints. */
     public abstract BoolExpr encodeSlotWellFormedConstraint(Slot slot);
 
+    /** Subclasses need to override this method to indicate how to slot preference constraints. */
     public abstract BoolExpr encodeSlotPreferenceConstraint(Slot slot);
 
+    /** Subclasses need to override this method to indicate how to decode the solution from solver. */
     public abstract Map<Integer, AnnotationMirror> decodeSolution(
             List<String> model, ProcessingEnvironment processingEnv);
 }
